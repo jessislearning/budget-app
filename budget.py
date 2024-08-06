@@ -30,12 +30,17 @@ class Category:
             return False
     
     def get_balance(self):
+        # returns the total for current category
         return self.balance
     
     def transfer(self, amount, transfer_cat):
         # withdraw from current category and deposit to another (transfer_cat)
-        self.withdraw(amount, f"Transfer to {transfer_cat.category_name}")
-        transfer_cat.deposit(amount, f"Transfer from {self.category_name}")
+        if amount <= self.balance:
+            self.withdraw(amount, f"Transfer to {transfer_cat.category_name}")
+            transfer_cat.deposit(amount, f"Transfer from {self.category_name}")
+            return True
+        else:
+            return False
 
     def check_funds(self, amount):
         if amount <= self.balance:
@@ -43,3 +48,18 @@ class Category:
         if amount > self.balance:
             return False
 
+def create_spend_chart(categories):
+    # list of total amount spent per category
+    spent_per_cat=[]
+    for category in categories:
+        category_total = 0
+        for item in category.ledger:
+            if item["amount"] < 0:
+             category_total += item["amount"]
+             print(item["amount"], category.category_name)
+        spent_per_cat.append(category_total)
+
+    # sum of total spending
+    total_spent = round(sum(spent_per_cat), 2)
+    percentages = [int(round(x/total_spent*100, -1)) for x in spent_per_cat]
+    return percentages
