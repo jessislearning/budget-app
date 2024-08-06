@@ -62,4 +62,15 @@ def create_spend_chart(categories):
     # sum of total spending
     total_spent = round(sum(spent_per_cat), 2)
     percentages = [int(round(x/total_spent*100, -1)) for x in spent_per_cat]
-    return percentages
+    
+    Line1 = "Percentage spent by category"+"\n"
+    lines = ""
+    for i in range(0,11):
+        lines += str(int(100-10*i)).rjust(3) + "|"
+        for entry in percentages:
+            if entry >= int(100-10*i):
+                lines += " o "
+            else:
+                lines += " x "
+        lines += "\n"
+    lines += "    " + "---"*len(percentages) + "\n"
