@@ -48,6 +48,7 @@ class Category:
         if amount > self.balance:
             return False
 
+
 def create_spend_chart(categories):
     # list of total amount spent per category
     spent_per_cat=[]
@@ -56,14 +57,18 @@ def create_spend_chart(categories):
         for item in category.ledger:
             if item["amount"] < 0:
              category_total += item["amount"]
-             print(item["amount"], category.category_name)
         spent_per_cat.append(category_total)
 
     # sum of total spending
     total_spent = round(sum(spent_per_cat), 2)
     percentages = [int(round(x/total_spent*100, -1)) for x in spent_per_cat]
     
-    Line1 = "Percentage spent by category"+"\n"
+    # building chart
+
+    #title line
+    title = "Percentage spent by category"+"\n"
+
+    # y-axis labels and bar gaph
     lines = ""
     for i in range(0,11):
         lines += str(int(100-10*i)).rjust(3) + "|"
@@ -71,6 +76,27 @@ def create_spend_chart(categories):
             if entry >= int(100-10*i):
                 lines += " o "
             else:
-                lines += " x "
+                lines += "   "
         lines += "\n"
     lines += "    " + "---"*len(percentages) + "\n"
+    
+    # x-axis labels
+    cat_names = []
+    for names in categories:
+        cat_names.append(names.category_name)
+    
+    max_length = max(len(name) for name in cat_names)
+
+    x_axis = ""
+    for i in range(max_length):
+        x_axis += "     "
+        for name in cat_names:
+            if i < len(name):
+                x_axis += name[i] + "  "
+            else:
+                x_axis += "   "
+        x_axis+="\n"
+
+    spend_chart =  title + lines + x_axis
+
+    return spend_chart
