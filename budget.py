@@ -2,15 +2,15 @@ class Category:
     def __init__(self, category_name):
         self.category_name = category_name
         self.ledger=[]
-        self.balance=0.0
+        self.balance=0.00
     
     def __str__(self):
         self.title = self.category_name.center(30, "*") + "\n"
         line = ""
         for item in self.ledger:
             description = str(item["description"]).ljust(23)
-            amount = str(format(int(item["amount"]),".2f")).rjust(7)
-            line += description + amount + "\n"
+            amount = str(format(float(item["amount"]),".2f")).rjust(7)
+            line += description[:23] + amount + "\n"
         total = "Total: " + format(self.balance, ".2f")
         return self.title + line + total
     
