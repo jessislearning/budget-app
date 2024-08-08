@@ -5,6 +5,7 @@ class Category:
         self.balance=0.00
     
     def __str__(self):
+        # formats the ledger to have a title line, and left aligned descriptions and right aligned amounts
         self.title = self.category_name.center(30, "*") + "\n"
         line = ""
         for item in self.ledger:
@@ -60,10 +61,10 @@ def create_spend_chart(categories):
         spent_per_cat.append(category_total)
 
     # sum of total spending
-    total_spent = round(sum(spent_per_cat), 2)
-    percentages = [int(round(x/total_spent*100, -1)) for x in spent_per_cat]
+    total_spent = sum(spent_per_cat)
+    percentages = [(x/total_spent*100) for x in spent_per_cat]
     
-    # building chart
+    # --BUILD CHART--
 
     #title line
     title = "Percentage spent by category"+"\n"
@@ -77,10 +78,10 @@ def create_spend_chart(categories):
                 lines += " o "
             else:
                 lines += "   "
-        lines += "\n"
-    lines += "    " + "---"*len(percentages) + "\n"
+        lines += " \n"
+    lines += "    " + "---"*len(percentages) + "-"+"\n"
     
-    # x-axis labels
+    # x-axis labels are the category names spelled out vertically
     cat_names = []
     for names in categories:
         cat_names.append(names.category_name)
@@ -95,8 +96,11 @@ def create_spend_chart(categories):
                 x_axis += name[i] + "  "
             else:
                 x_axis += "   "
-        x_axis+="\n"
+        x_axis+="\n"    
+    x_axis = x_axis.rstrip("\n")
 
+    # prints out the whole chart
     spend_chart =  title + lines + x_axis
 
     return spend_chart
+            
